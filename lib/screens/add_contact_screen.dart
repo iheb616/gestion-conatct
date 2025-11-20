@@ -34,8 +34,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Contact'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -78,8 +78,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
               ElevatedButton(
                 onPressed: _saveContact,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 child: const Text('Save Contact', style: TextStyle(fontSize: 16)),

@@ -12,10 +12,7 @@ class ContactListScreen extends StatefulWidget {
 }
 
 class _ContactListScreenState extends State<ContactListScreen> {
-  List<Contact> contacts = [
-    Contact(name: 'John Doe', phone: '+1234567890', email: 'john@email.com'),
-    Contact(name: 'Jane Smith', phone: '+0987654321', email: 'jane@email.com'),
-  ];
+  final List<Contact> contacts = [];
 
   void _addContact(Contact contact) {
     setState(() {
@@ -43,11 +40,11 @@ class _ContactListScreenState extends State<ContactListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Contacts'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: contacts.isEmpty
-          ? EmptyState()
+          ? const EmptyState()
           : ListView.builder(
               itemCount: contacts.length,
               itemBuilder: (context, index) {
@@ -59,9 +56,9 @@ class _ContactListScreenState extends State<ContactListScreen> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddContact,
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        child: Icon(Icons.add),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        child: const Icon(Icons.add),
       ),
     );
   }

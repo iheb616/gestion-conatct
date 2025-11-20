@@ -13,10 +13,10 @@ class ContactCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           child: Text(
             contact.name[0].toUpperCase(),
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
         title: Text(
@@ -32,7 +32,7 @@ class ContactCard extends StatelessWidget {
           ],
         ),
         trailing: IconButton(
-          icon: const Icon(Icons.delete, color: Colors.red),
+          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
           onPressed: onDelete,
         ),
       ),
