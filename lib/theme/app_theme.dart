@@ -27,7 +27,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         // Use surfaceVariant for wider Flutter SDK compatibility
-        fillColor: colorScheme.surfaceVariant,
+        fillColor: colorScheme.surfaceContainerHighest,
       ),
     );
   }

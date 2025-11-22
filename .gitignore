@@ -1,0 +1,52 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub/
+build/
+flutter_*.png
+
+# Flutter generated plugins
+.generated_plugin_registrant.dart
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle/
+**/android/captures/
+**/android/local.properties
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# iOS/macOS related
+**/ios/Flutter/.last_build_id
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/macos/Pods/
+**/macos/.symlinks/
+
+# Xcode junk
+**/ios/Runner.xcworkspace/
+**/macos/Runner.xcworkspace/
+**/ios/Runner.xcodeproj/project.xcworkspace/
+**/macos/Runner.xcodeproj/project.xcworkspace/
+xcuserdata/
+
+# Web related
+**/web/.dart_tool/
+**/web/.firebase/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# IntelliJ/Android Studio
+*.iml
+.idea/
+
+# Logs
+*.log
+
+# Others
+pubspec.lock
