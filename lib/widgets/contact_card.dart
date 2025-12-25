@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/contact.dart';
+import '../models/person.dart';
 
 class ContactCard extends StatelessWidget {
-  final Contact contact;
+  final Person contact;
   final VoidCallback onDelete;
 
   const ContactCard({super.key, required this.contact, required this.onDelete});
@@ -15,20 +15,19 @@ class ContactCard extends StatelessWidget {
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.primary,
           child: Text(
-            contact.name[0].toUpperCase(),
+            contact.prenom[0].toUpperCase(),
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
         title: Text(
-          contact.name,
+          '${contact.prenom} ${contact.nom}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 4),
-            Text('📞 ${contact.phone}'),
-            Text('📧 ${contact.email}'),
+            Text('📞 ${contact.telephone}'),
           ],
         ),
         trailing: IconButton(

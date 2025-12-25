@@ -1,11 +1,11 @@
 // Importe le package Flutter pour l'interface utilisateur
 import 'package:flutter/material.dart';
-// Importe le modèle Contact pour créer des objets contact
-import '../models/contact.dart';
+// Importe le modèle Person pour créer des objets personne
+import '../models/person.dart';
 // Importe les fonctions de validation des champs
 import '../utils/validators.dart';
-// Importe le helper pour les opérations de base de données
-import '../utils/database_helper.dart';
+// Importe l'API service pour communiquer avec le backend
+import '../services/api_service.dart';
 
 // Classe principale - écran pour ajouter un nouveau contact (StatefulWidget)
 // StatefulWidget car l'état du formulaire change au cours de l'interaction
@@ -20,11 +20,11 @@ class AddContactScreen extends StatefulWidget {
 // Classe d'état qui gère la logique et l'interface du formulaire
 class _AddContactScreenState extends State<AddContactScreen> {
   // Contrôleur pour gérer le texte du champ nom
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController nomController = TextEditingController();
+  // Contrôleur pour gérer le texte du champ prénom
+  final TextEditingController prenomController = TextEditingController();
   // Contrôleur pour gérer le texte du champ téléphone
-  final TextEditingController phoneController = TextEditingController();
-  // Contrôleur pour gérer le texte du champ email
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController telephoneController = TextEditingController();
   // Clé globale pour accéder et valider le formulaire
   final _formKey = GlobalKey<FormState>();
 
@@ -32,36 +32,38 @@ class _AddContactScreenState extends State<AddContactScreen> {
   Future<void> _saveContact() async {
     // Vérifie que le formulaire est valide (tous les champs respectent les règles)
     if (_formKey.currentState!.validate()) {
-      // Crée un nouvel objet Contact avec les données du formulaire
-      final newContact = Contact(
-        name: nameController.text, // Récupère le nom saisi
-        phone: phoneController.text, // Récupère le téléphone saisi
-        email: emailController.text, // Récupère l'email saisi
+      // Crée un nouvel objet Person avec les données du formulaire
+      final newPerson = Person(
+        nom: nomController.text, // Récupère le nom saisi
+        prenom: prenomController.text, // Récupère le prénom saisi
+        telephone: telephoneController.text, // Récupère le téléphone saisi
       );
-      // Sauvegarde le contact en BD et ferme l'écran
-      await _saveToDbAndClose(newContact);
+      // Sauvegarde le contact via l'API et ferme l'écran
+      await _saveToApiAndClose(newPerson);
     }
   }
 
-  // Fonction async pour sauvegarder le contact en BD et fermer l'écran
-  Future<void> _saveToDbAndClose(Contact contact) async {
+  // Fonction async pour sauvegarder le contact via l'API et fermer l'écran
+  Future<void> _saveToApiAndClose(Person person) async {
     try {
       // Affiche un message de debug (tentative de sauvegarde)
-      print('DEBUG: Attempting to save contact: ${contact.name}');
-      // Insère le contact dans la base de données (convertit Contact en Map)
-      await DatabaseHelper.instance.insertContact(contact.toMap());
+      print('DEBUG: Attempting to save person: ${person.nom} ${person.prenom}');
+      // Envoie le contact à l'API
+      await ApiService.addPerson(person);
       // Affiche un message de debug (succès)
-      print('DEBUG: Contact saved successfully');
+      print('DEBUG: Person saved successfully');
       // Ferme l'écran et retourne true pour signaler le succès
-      Navigator.pop(context, true);
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
     } catch (e) {
       // Gère les erreurs qui pourraient survenir
-      print('DEBUG: Error saving contact: $e'); // Affiche l'erreur en debug
+      print('DEBUG: Error saving person: $e'); // Affiche l'erreur en debug
       // Vérifie que le widget est encore monté avant d'afficher le message d'erreur
       if (mounted) {
         // Affiche un SnackBar avec le message d'erreur
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving contact: $e')),
+          SnackBar(content: Text('Erreur: $e')),
         );
       }
     }
@@ -86,13 +88,25 @@ class _AddContactScreenState extends State<AddContactScreen> {
           child: Column(
             // Colonne pour empiler les champs verticalement
             children: [
-              // Champ de texte pour le nom
+              // Champ de texte pour le prénom
               TextFormField(
-                controller: nameController, // Lie le champ au contrôleur
+                controller: prenomController, // Lie le champ au contrôleur
                 decoration: const InputDecoration(
-                  labelText: 'Name', // Étiquette du champ
+                  labelText: 'Prénom', // Étiquette du champ
                   border: OutlineInputBorder(), // Bordure
                   prefixIcon: Icon(Icons.person), // Icône de personne
+                ),
+                validator: Validators.validateName, // Valide le prénom
+              ),
+              // Espacement entre les champs
+              const SizedBox(height: 16),
+              // Champ de texte pour le nom
+              TextFormField(
+                controller: nomController, // Lie le champ au contrôleur
+                decoration: const InputDecoration(
+                  labelText: 'Nom', // Étiquette du champ
+                  border: OutlineInputBorder(), // Bordure
+                  prefixIcon: Icon(Icons.person_outline), // Icône
                 ),
                 validator: Validators.validateName, // Valide le nom
               ),
@@ -100,27 +114,14 @@ class _AddContactScreenState extends State<AddContactScreen> {
               const SizedBox(height: 16),
               // Champ de texte pour le téléphone
               TextFormField(
-                controller: phoneController, // Lie le champ au contrôleur
+                controller: telephoneController, // Lie le champ au contrôleur
                 decoration: const InputDecoration(
-                  labelText: 'Phone', // Étiquette du champ
+                  labelText: 'Téléphone', // Étiquette du champ
                   border: OutlineInputBorder(), // Bordure
                   prefixIcon: Icon(Icons.phone), // Icône téléphone
                 ),
                 keyboardType: TextInputType.phone, // Clavier numérique
                 validator: Validators.validatePhone, // Valide le téléphone
-              ),
-              // Espacement entre les champs
-              const SizedBox(height: 16),
-              // Champ de texte pour l'email
-              TextFormField(
-                controller: emailController, // Lie le champ au contrôleur
-                decoration: const InputDecoration(
-                  labelText: 'Email', // Étiquette du champ
-                  border: OutlineInputBorder(), // Bordure
-                  prefixIcon: Icon(Icons.email), // Icône email
-                ),
-                keyboardType: TextInputType.emailAddress, // Clavier email
-                validator: Validators.validateEmail, // Valide l'email
               ),
               // Espacement avant le bouton
               const SizedBox(height: 24),
@@ -132,7 +133,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                   foregroundColor: Theme.of(context).colorScheme.onPrimary, // Couleur du texte
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Espacement interne
                 ),
-                child: const Text('Save Contact', style: TextStyle(fontSize: 16)), // Texte du bouton
+                child: const Text('Ajouter', style: TextStyle(fontSize: 16)), // Texte du bouton
               ),
             ],
           ),

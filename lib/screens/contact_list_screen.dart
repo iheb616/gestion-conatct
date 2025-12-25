@@ -1,10 +1,10 @@
 // Importe les packages et fichiers nécessaires
 import 'package:flutter/material.dart'; // Package Flutter pour l'interface utilisateur
-import '../models/contact.dart'; // Modèle Contact
+import '../models/person.dart'; // Modèle Person
 import '../widgets/contact_card.dart'; // Widget pour afficher une carte de contact
 import '../widgets/empty_state.dart'; // Widget pour afficher un état vide
 import 'add_contact_screen.dart'; // Écran pour ajouter un contact
-import '../utils/database_helper.dart'; // Helper pour les opérations de base de données
+import '../services/api_service.dart'; // API service pour communiquer avec le backend
 
 // Classe principale - écran de liste des contacts (StatefulWidget)
 // Un StatefulWidget car l'état change (ajout, suppression, recherche de contacts)
@@ -18,8 +18,8 @@ class ContactListScreen extends StatefulWidget {
 
 // Classe d'état qui gère la logique et l'UI de l'écran
 class _ContactListScreenState extends State<ContactListScreen> {
-  // Liste pour stocker tous les contacts récupérés de la BD
-  final List<Contact> contacts = [];
+  // Liste pour stocker tous les contacts récupérés de l'API
+  final List<Person> contacts = [];
   
   // Contrôleur pour gérer le texte dans le champ de recherche
   final TextEditingController _searchController = TextEditingController();
@@ -43,35 +43,56 @@ class _ContactListScreenState extends State<ContactListScreen> {
     });
   }
 
-  // Fonction async pour initialiser la BD (si on est sur desktop) et charger les contacts
+  // Fonction async pour initialiser et charger les contacts
   Future<void> _initAndLoad() async {
-    // Initialise la base de données pour desktop si nécessaire
-    await DatabaseHelper.instance.initForDesktopIfNeeded();
-    // Charge les contacts de la base de données
+    // Charge les contacts depuis l'API
     await _loadContacts();
   }
 
-  // Fonction async pour charger tous les contacts de la base de données
+  // Fonction async pour charger tous les contacts depuis l'API
   Future<void> _loadContacts() async {
-    // Récupère tous les contacts de la BD sous forme de liste de maps
-    final rows = await DatabaseHelper.instance.getAllContacts();
-    // Met à jour l'UI avec setState
-    setState(() {
-      // Vide la liste actuelle et ajoute les nouveaux contacts convertis en objets Contact
-      contacts
-        ..clear() // Vide la liste
-        ..addAll(rows.map((r) => Contact.fromMap(r)).toList()); // Ajoute les nouveaux contacts
-    });
+    try {
+      // Récupère tous les contacts depuis l'API
+      final persons = await ApiService.getPersons();
+      // Met à jour l'UI avec setState
+      setState(() {
+        // Vide la liste actuelle et ajoute les nouveaux contacts
+        contacts
+          ..clear() // Vide la liste
+          ..addAll(persons); // Ajoute les nouveaux contacts
+      });
+    } catch (e) {
+      print('Error loading contacts: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors du chargement: $e')),
+        );
+      }
+    }
   }
 
   // Fonction async pour supprimer un contact par son ID
   Future<void> _deleteContact(int? id) async {
     // Vérifie que l'ID n'est pas null
     if (id == null) return;
-    // Supprime le contact de la base de données
-    await DatabaseHelper.instance.deleteContact(id);
-    // Recharge la liste des contacts pour refléter la suppression
-    await _loadContacts();
+    try {
+      // Supprime le contact via l'API
+      await ApiService.deletePerson(id);
+      // Recharge la liste des contacts pour refléter la suppression
+      await _loadContacts();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Contact supprimé avec succès')),
+        );
+      }
+    } catch (e) {
+      print('Error deleting contact: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de la suppression: $e')),
+        );
+      }
+    }
   }
 
   // Fonction async pour naviguer vers l'écran d'ajout de contact
@@ -92,10 +113,12 @@ class _ContactListScreenState extends State<ContactListScreen> {
   Widget build(BuildContext context) {
     // Filtre les contacts en fonction de la recherche
     // Si _search est vide, affiche tous les contacts
-    // Sinon, affiche uniquement les contacts dont le nom contient le texte de recherche
+    // Sinon, affiche uniquement les contacts dont le nom ou prénom contient le texte de recherche
     final filteredContacts = _search.isEmpty
         ? contacts
-        : contacts.where((c) => c.name.toLowerCase().contains(_search)).toList();
+        : contacts.where((c) => 
+            c.nom.toLowerCase().contains(_search) ||
+            c.prenom.toLowerCase().contains(_search)).toList();
     
     // Retourne l'interface principale (Scaffold)
     return Scaffold(
