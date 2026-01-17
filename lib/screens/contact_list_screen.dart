@@ -3,6 +3,7 @@ import '../models/person.dart';
 import '../widgets/contact_card.dart';
 import '../widgets/empty_state.dart';
 import 'add_contact_screen.dart';
+import 'edit_contact_screen.dart';
 import 'login_screen.dart';
 import '../services/api_service.dart';
 
@@ -110,6 +111,18 @@ class _ContactListScreenState extends State<ContactListScreen> {
     final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (context) => const AddContactScreen()),
+    );
+    if (result == true) {
+      await _loadContacts();
+    }
+  }
+
+  Future<void> _navigateToEditContact(Person contact) async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditContactScreen(contact: contact),
+      ),
     );
     if (result == true) {
       await _loadContacts();
@@ -230,6 +243,7 @@ class _ContactListScreenState extends State<ContactListScreen> {
                             return ContactCard(
                               contact: contact,
                               onDelete: () => _deleteContact(contact.id),
+                              onEdit: () => _navigateToEditContact(contact),
                             );
                           },
                         ),

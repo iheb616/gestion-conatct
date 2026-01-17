@@ -116,11 +116,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         // Username field
                         TextFormField(
                           controller: _usernameController,
-                          style: const TextStyle(color: Color(0xFF111827), fontSize: 16),
-                          decoration: const InputDecoration(
+                          style: const TextStyle(
+                            color: Color(0xFF000000),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration(
                             labelText: 'Username',
+                            labelStyle: const TextStyle(
+                              color: Color(0xFF374151),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
                             hintText: 'Enter your username',
-                            prefixIcon: Icon(Icons.person_outline),
+                            hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                            prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF374151)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFF9CA3AF), width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFF9CA3AF), width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 2.5),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF3F4F6),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -136,11 +165,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _passwordController,
                           obscureText: _obscurePassword,
-                          style: const TextStyle(color: Color(0xFF111827), fontSize: 16),
+                          style: const TextStyle(
+                            color: Color(0xFF000000),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: InputDecoration(
                             labelText: 'Password',
+                            labelStyle: const TextStyle(
+                              color: Color(0xFF374151),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
                             hintText: 'Enter your password',
-                            prefixIcon: const Icon(Icons.lock_outline),
+                            hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                            prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF374151)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFF9CA3AF), width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFF9CA3AF), width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 2.5),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF3F4F6),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword

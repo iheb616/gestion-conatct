@@ -4,8 +4,14 @@ import '../models/person.dart';
 class ContactCard extends StatelessWidget {
   final Person contact;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
-  const ContactCard({super.key, required this.contact, required this.onDelete});
+  const ContactCard({
+    super.key,
+    required this.contact,
+    required this.onDelete,
+    required this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +71,18 @@ class ContactCard extends StatelessWidget {
             ],
           ),
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
-          onPressed: () {
-            showDialog(
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.edit_outlined, color: Color(0xFF3B82F6), size: 20),
+              onPressed: onEdit,
+              tooltip: 'Edit',
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
+              onPressed: () {
+                showDialog(
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('Delete Contact'),
@@ -92,6 +106,8 @@ class ContactCard extends StatelessWidget {
               ),
             );
           },
+        ),
+          ],
         ),
       ),
     );

@@ -1,3 +1,20 @@
-2026/01/17-19:48:51.315 594c Reusing MANIFEST C:\Users\khemi\AppData\Local\Temp\flutter_tools.9c4e3bf3\flutter_tools_chrome_device.387bfbb8\Default\Site Characteristics Database/MANIFEST-000001
-2026/01/17-19:48:51.315 594c Recovering log #3
-2026/01/17-19:48:51.316 594c Reusing old log C:\Users\khemi\AppData\Local\Temp\flutter_tools.9c4e3bf3\flutter_tools_chrome_device.387bfbb8\Default\Site Characteristics Database/000003.log 
+2026/01/17-22:33:03.464 3aec Reusing MANIFEST C:\Users\bilel\AppData\Local\Temp\flutter_tools.449ad814\flutter_tools_chrome_device.be6681c8\Default\Site Characteristics Database/MANIFEST-000001
+2026/01/17-22:33:03.472 3aec Recovering log #3
+2026/01/17-22:33:03.472 3aec Level-0 table #10: started
+2026/01/17-22:33:03.475 3aec Level-0 table #10: 251 bytes OK
+2026/01/17-22:33:03.476 3aec Recovering log #6
+2026/01/17-22:33:03.476 3aec Level-0 table #11: started
+2026/01/17-22:33:03.479 3aec Level-0 table #11: 165 bytes OK
+2026/01/17-22:33:03.479 3aec Recovering log #10
+2026/01/17-22:33:03.480 3aec Reusing old log C:\Users\bilel\AppData\Local\Temp\flutter_tools.449ad814\flutter_tools_chrome_device.be6681c8\Default\Site Characteristics Database/000010.log 
+2026/01/17-22:33:03.490 3aec Delete type=0 #3
+2026/01/17-22:33:03.490 3aec Delete type=0 #6
+2026/01/17-22:33:03.491 4444 Compacting 5@0 + 0@1 files
+2026/01/17-22:33:03.496 4444 Generated table #12@0: 2 keys, 194 bytes
+2026/01/17-22:33:03.496 4444 Compacted 5@0 + 0@1 files => 194 bytes
+2026/01/17-22:33:03.498 4444 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/01/17-22:33:03.499 4444 Delete type=2 #4
+2026/01/17-22:33:03.499 4444 Delete type=2 #7
+2026/01/17-22:33:03.499 4444 Delete type=2 #8
+2026/01/17-22:33:03.499 4444 Delete type=2 #10
+2026/01/17-22:33:03.499 4444 Delete type=2 #11

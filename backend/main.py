@@ -125,6 +125,39 @@ def get_person(person_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Contact not found")
     return person
 
+@app.put("/personnes/{person_id}", response_model=PersonResponse)
+def update_person(person_id: int, person: PersonCreate, db: Session = Depends(get_db)):
+    """Update a contact"""
+    # Validate phone number
+    if not validate_phone(person.telephone):
+        raise HTTPException(status_code=400, detail="Phone number must be at least 10 digits")
+    
+    # Validate names
+    if len(person.nom.strip()) < 2 or len(person.prenom.strip()) < 2:
+        raise HTTPException(status_code=400, detail="Names must be at least 2 characters")
+    
+    # Get existing person
+    db_person = db.query(Person).filter(Person.id == person_id).first()
+    if not db_person:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    
+    # Check if phone already exists for another contact
+    existing_phone = db.query(Person).filter(
+        Person.telephone == person.telephone,
+        Person.id != person_id
+    ).first()
+    if existing_phone:
+        raise HTTPException(status_code=400, detail="This phone number already exists")
+    
+    # Update person
+    db_person.nom = person.nom.strip()
+    db_person.prenom = person.prenom.strip()
+    db_person.telephone = person.telephone.strip()
+    
+    db.commit()
+    db.refresh(db_person)
+    return db_person
+
 @app.delete("/personnes/{person_id}")
 def delete_person(person_id: int, db: Session = Depends(get_db)):
     """Delete a contact"""
@@ -143,4 +176,4 @@ def root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

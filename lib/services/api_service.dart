@@ -98,6 +98,17 @@ class ApiService {
     );
   }
 
+  static Future<String> updatePerson(Person person) async {
+    return _handleRequest(
+      () => http.put(
+        Uri.parse('$baseUrl/personnes/${person.id}'),
+        headers: _headers,
+        body: json.encode(person.toJson()),
+      ),
+      (_) => 'Contact updated successfully',
+    );
+  }
+
   static Future<String> deletePerson(int id) async {
     return _handleRequest(
       () => http.delete(
