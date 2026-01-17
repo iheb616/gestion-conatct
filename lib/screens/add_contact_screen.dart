@@ -43,27 +43,19 @@ class _AddContactScreenState extends State<AddContactScreen> {
     }
   }
 
-  // Fonction async pour sauvegarder le contact via l'API et fermer l'écran
   Future<void> _saveToApiAndClose(Person person) async {
     try {
-      // Affiche un message de debug (tentative de sauvegarde)
-      print('DEBUG: Attempting to save person: ${person.nom} ${person.prenom}');
-      // Envoie le contact à l'API
       await ApiService.addPerson(person);
-      // Affiche un message de debug (succès)
-      print('DEBUG: Person saved successfully');
-      // Ferme l'écran et retourne true pour signaler le succès
       if (mounted) {
         Navigator.pop(context, true);
       }
     } catch (e) {
-      // Gère les erreurs qui pourraient survenir
-      print('DEBUG: Error saving person: $e'); // Affiche l'erreur en debug
-      // Vérifie que le widget est encore monté avant d'afficher le message d'erreur
       if (mounted) {
-        // Affiche un SnackBar avec le message d'erreur
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
